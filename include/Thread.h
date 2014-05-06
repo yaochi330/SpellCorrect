@@ -1,9 +1,8 @@
 #ifndef THREAD_H_
 #define THREAD_H_
 #include <pthread.h>
-#include "noncopyable.h"
 
-class Thread : public noncopyable{
+class Thread{
 public:
 	Thread();
 	virtual ~Thread();

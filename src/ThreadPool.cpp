@@ -1,10 +1,5 @@
-/*
- * ThreadPool.cpp
- *
- *  Created on: Apr 28, 2014
- *      Author: yaochi
- */
-#include <iostream>
+#include <fstream>
+#include <sstream>
 #include "ThreadPool.h"
 
 ThreadPool::ThreadPool(std::vector<WorkThread>::size_type thread_num) :
@@ -21,6 +16,26 @@ ThreadPool::~ThreadPool() {
 	off();
 }
 
+void load_dict(std::map<std::string, std::size_t> &word_dict) {
+	std::ifstream in("../conf/dict.conf");
+	std::string dict_name;
+	in >> dict_name;
+	in.close();
+	in.clear();
+
+	in.open(dict_name.c_str());
+	std::string word;
+	std::size_t freq;
+	std::string line;
+	while(getline(in, line)) {
+		std::istringstream is(line);
+		is >> word >> freq;
+		word_dict.insert(make_pair(word, freq));
+	}
+	in.close();
+	in.clear();
+}
+
 void ThreadPool::on() {
 	if (_is_start == false) {
 		_is_start = true;
@@ -28,6 +43,7 @@ void ThreadPool::on() {
 				iter != _thread_vec.end(); ++iter) {
 			iter->start();
 		}
+		load_dict(_word_dict);
 	}
 }
 
@@ -63,4 +79,8 @@ bool ThreadPool::get_task(Task &task) {
 		ret = true;
 	}
 	return ret;
+}
+
+const std::map<std::string, std::size_t> &ThreadPool::get_word_dict() {
+	return _word_dict;
 }
