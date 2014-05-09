@@ -21,8 +21,9 @@ function stat
 	ps -ef | grep server
 }
 
-case &1 in
+case $1 in
 	start) start ;;
 	stop) stop ;;
 	restart) restart ;;
 	stat) stat ;;
+esac

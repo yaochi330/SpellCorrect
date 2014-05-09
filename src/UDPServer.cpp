@@ -38,7 +38,6 @@ void UDPServer::sendTo(char *send_buf) {
 	sendto(_server_fd, send_buf, send_size, 0,
 			(struct sockaddr *) &_client_addr, sizeof(_client_addr));
 }
-
 //void UDPServer::set_send_addr(const struct sockaddr_in &client_addr) {
 //	_client_addr = client_addr;
 //}

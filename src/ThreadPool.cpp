@@ -3,8 +3,8 @@
 #include "ThreadPool.h"
 
 ThreadPool::ThreadPool(std::vector<WorkThread>::size_type thread_num) :
-		_is_start(false), _thread_num(thread_num), _thread_vec(_thread_num), _task_que(),
-		_mutex(), _cond(_mutex) {
+		_is_start(false), _thread_num(thread_num), _thread_vec(_thread_num), _task_que(), _mutex(), _cond(
+				_mutex) {
 	for (std::vector<WorkThread>::iterator iter = _thread_vec.begin();
 			iter != _thread_vec.end(); ++iter) {
 		iter->relate_threadpool(this);
@@ -17,23 +17,23 @@ ThreadPool::~ThreadPool() {
 }
 
 void load_dict(std::map<std::string, std::size_t> &word_dict) {
-	std::ifstream in("../conf/dict.conf");
+	std::ifstream in_conf("../conf/dict.conf");
 	std::string dict_name;
-	in >> dict_name;
-	in.close();
-	in.clear();
-
-	in.open(dict_name.c_str());
-	std::string word;
-	std::size_t freq;
-	std::string line;
-	while(getline(in, line)) {
-		std::istringstream is(line);
-		is >> word >> freq;
-		word_dict.insert(make_pair(word, freq));
+	while (in_conf >> dict_name) {
+		std::ifstream in_dict(dict_name.c_str());
+		std::string word;
+		std::size_t freq;
+		std::string line;
+		while (getline(in_dict, line)) {
+			std::istringstream is(line);
+			is >> word >> freq;
+			word_dict.insert(make_pair(word, freq));
+		}
+		in_dict.close();
+		in_dict.clear();
 	}
-	in.close();
-	in.clear();
+	in_conf.close();
+	in_conf.clear();
 }
 
 void ThreadPool::on() {
