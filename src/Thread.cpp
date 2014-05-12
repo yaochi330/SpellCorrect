@@ -8,13 +8,14 @@ Thread::Thread() : _tid(0), _is_on(false) {
 Thread::~Thread() {
 	pthread_attr_destroy(&_attr);
 }
+
 void Thread::start() {
 	if(!_is_on) {
 		_is_on = true;
 		if(pthread_attr_setdetachstate(&_attr, PTHREAD_CREATE_DETACHED)) {
 			throw std::runtime_error("attr");
 		}
-		if(pthread_create(&_tid, NULL, thread_func, this)) {
+		if(pthread_create(&_tid, &_attr, thread_func, this)) {
 			throw std::runtime_error("thread create");
 		}
 	}
